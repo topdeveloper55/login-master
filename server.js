@@ -41,6 +41,7 @@ app.get("/", (req, res) => {
 require("./app/routes/spot.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/wallet.route")(app);
+require("./app/routes/spin.route")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3001;

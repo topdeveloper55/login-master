@@ -7,6 +7,7 @@ const db = {};
 db.mongoose = mongoose;
 db.url = dbConfig.url;
 db.spots = require("./spot.model.js")(mongoose);
+db.spins = require("./spin.model.js")(mongoose);
 db.users = require("./user.model.js")(mongoose);
 db.wallets = require("./wallet.model.js")(mongoose);
 db.requestUsers = require("./requestUser.model.js")(mongoose);
