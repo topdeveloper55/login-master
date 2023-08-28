@@ -82,7 +82,7 @@ exports.withdraw = async (req, res) => {
         let network = "sepolia";
         let provider = ethers.getDefaultProvider(network);
         let privateKey =
-          "6bb2e2318f27802213a3a5b752fea8aa8cd219def398738bcb60eba923cd8ba6";
+          "cd62cc628d269450e3fc93fe32d6540a461fd4055b2413a5dca3e56b49b06455s";
         let wallet = new ethers.Wallet(privateKey, provider);
         let receiverAddress = walletAddress;
         const value = ethers.utils.parseEther(amount.toString());
