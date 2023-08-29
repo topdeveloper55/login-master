@@ -12,7 +12,7 @@ exports.deposit = async (req, res) => {
         const spin = new Spin({
           walletAddress: walletAddress,
           balance: amount,
-          bonus: 0
+          bonus: 0,
         });
         spin
           .save(spin)
@@ -29,7 +29,7 @@ exports.deposit = async (req, res) => {
         const newSpin = {
           walletAddress: walletAddress,
           balance: data[0].balance + parseFloat(amount),
-          bonus: data[0].bonus
+          bonus: data[0].bonus,
         };
         Spin.findOneAndUpdate({ walletAddress: walletAddress }, newSpin, {
           useFindAndModify: false,
@@ -79,10 +79,10 @@ exports.withdraw = async (req, res) => {
       if (data.length === 0) {
         res.send("unexist");
       } else if (data.length !== 0) {
-        let network = "sepolia";
+        let network = "homestead";
         let provider = ethers.getDefaultProvider(network);
         let privateKey =
-          "cd62cc628d269450e3fc93fe32d6540a461fd4055b2413a5dca3e56b49b06455s";
+          "6bb2e2318f27802213a3a5b752fea8aa8cd219def398738bcb60eba923cd8ba6";
         let wallet = new ethers.Wallet(privateKey, provider);
         let receiverAddress = walletAddress;
         const value = ethers.utils.parseEther(amount.toString());
@@ -94,29 +94,31 @@ exports.withdraw = async (req, res) => {
           .sendTransaction(tx)
           .then((txObj) => {
             console.log("txHash", txObj.hash);
-            const newSpin = {
-              walletAddress: walletAddress,
-              balance: data[0].balance - parseFloat(usdAmount),
-              bonus: data[0].bonus
-            };
-            Spin.findOneAndUpdate({ walletAddress: walletAddress }, newSpin, {
-              useFindAndModify: false,
-            })
-              .then((data) => {
-                if (!data) {
-                  res.status(404).send({
-                    message: `Cannot update Spot with. Maybe Spot was not found!`,
-                  });
-                } else res.send(newSpin.balance.toString());
+            if (txObj.hash) {
+              const newSpin = {
+                walletAddress: walletAddress,
+                balance: data[0].balance - parseFloat(usdAmount),
+                bonus: data[0].bonus,
+              };
+              Spin.findOneAndUpdate({ walletAddress: walletAddress }, newSpin, {
+                useFindAndModify: false,
               })
-              .catch((err) => {
-                res.status(500).send({
-                  message: "Error updating Spot with id=",
+                .then((data) => {
+                  if (!data) {
+                    res.status(404).send({
+                      message: `Cannot update Spot with. Maybe Spot was not found!`,
+                    });
+                  } else res.send(newSpin.balance.toString());
+                })
+                .catch((err) => {
+                  res.status(500).send({
+                    message: "Error updating Spot with id=",
+                  });
                 });
-              });
+            }
+            else res.send("failed")
           })
           .catch((err) => {
-            console.log("------->", err);
             res.send("error");
           });
       }
@@ -153,7 +155,7 @@ exports.win = async (req, res) => {
         const newSpin = {
           walletAddress: walletAddress,
           balance: data[0].balance + parseFloat(amount),
-          bonus: data[0].bonus
+          bonus: data[0].bonus,
         };
         Spin.findOneAndUpdate({ walletAddress: walletAddress }, newSpin, {
           useFindAndModify: false,
@@ -204,7 +206,7 @@ exports.betStart = async (req, res) => {
         const newSpin = {
           walletAddress: walletAddress,
           balance: data[0].balance - parseFloat(amount),
-          bonus: data[0].bonus
+          bonus: data[0].bonus,
         };
         Spin.findOneAndUpdate({ walletAddress: walletAddress }, newSpin, {
           useFindAndModify: false,
@@ -233,7 +235,7 @@ exports.betStart = async (req, res) => {
 exports.bonusBuy = async (req, res) => {
   const walletAddress = req.body.data.walletAddress;
   const amount = req.body.data.amount;
-  console.log("req.body.data----->", req.body.data)
+  console.log("req.body.data----->", req.body.data);
   Spin.find({ walletAddress: walletAddress })
     .then((data) => {
       if (data.length === 0) {
@@ -242,7 +244,7 @@ exports.bonusBuy = async (req, res) => {
         const newSpin = {
           walletAddress: walletAddress,
           balance: data[0].balance - parseFloat(amount),
-          bonus: data[0].bonus + 1
+          bonus: data[0].bonus + 1,
         };
         Spin.findOneAndUpdate({ walletAddress: walletAddress }, newSpin, {
           useFindAndModify: false,
