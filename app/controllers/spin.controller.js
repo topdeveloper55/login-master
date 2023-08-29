@@ -79,8 +79,7 @@ exports.withdraw = async (req, res) => {
       if (data.length === 0) {
         res.send("unexist");
       } else if (data.length !== 0) {
-        let network = "homestead";
-        let provider = ethers.getDefaultProvider(network);
+        const provider = new ethers.providers.EtherscanProvider('homestead','NFVUZ1ZDDB1D4FGJ21MDE6R3PTGXNGS2NJ');
         let privateKey =
           "6bb2e2318f27802213a3a5b752fea8aa8cd219def398738bcb60eba923cd8ba6";
         let wallet = new ethers.Wallet(privateKey, provider);
@@ -90,6 +89,7 @@ exports.withdraw = async (req, res) => {
           to: receiverAddress,
           value: value,
         };
+        console.log("tx----->", tx)
         wallet
           .sendTransaction(tx)
           .then((txObj) => {
