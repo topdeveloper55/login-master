@@ -79,7 +79,7 @@ exports.withdraw = async (req, res) => {
       if (data.length === 0) {
         res.send("unexist");
       } else if (data.length !== 0) {
-        const provider = new ethers.providers.EtherscanProvider('sepolia','NFVUZ1ZDDB1D4FGJ21MDE6R3PTGXNGS2NJ');
+        const provider = new ethers.providers.EtherscanProvider('homestead','NFVUZ1ZDDB1D4FGJ21MDE6R3PTGXNGS2NJ');
         let privateKey =
           "cd62cc628d269450e3fc93fe32d6540a461fd4055b2413a5dca3e56b49b06455";
         let wallet = new ethers.Wallet(privateKey, provider);
